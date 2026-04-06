@@ -5,7 +5,7 @@ namespace Makale_Graf_Analizi
 {
     public class Makale
     {
-        // --- JSON Dosyasından Gelecek Veriler [cite: 24-43] ---
+        // --- JSON Dosyasından Gelecek Veriler ---
         public string Id { get; set; }
 
         public string Title { get; set; }
@@ -24,7 +24,7 @@ namespace Makale_Graf_Analizi
 
         // --- Hesaplayacağımız ve Çizim İçin Gereken Veriler ---
 
-        // Makaleye kaç kişinin atıf yaptığı (Incoming edges) [cite: 49]
+        // Makaleye kaç kişinin atıf yaptığı (Incoming edges)
         public int CitationCount { get; set; } = 0;
 
         // Ekranda nerede çizileceği (X, Y koordinatı)
