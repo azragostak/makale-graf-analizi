@@ -9,7 +9,7 @@ namespace Makale_Graf_Analizi
 {
     public partial class Form1 : Form
     {
-        // --- BU EKSİK SATIRI BURAYA EKLE ---
+    
         HashSet<string> sonEklenenHCoreIds = new HashSet<string>();
         // -------------------------------------
         Makale odaklanilanMakale = null; // null ise her şeyi çiz, doluysa sadece onu ve komşularını çiz
@@ -44,7 +44,6 @@ namespace Makale_Graf_Analizi
             layoutTimer.Interval = 16; // yaklaşık 60 FPS
             layoutTimer.Tick += (s, e) => ForceLayoutStep();
 
-            //---BU İKİ SATIRI EKLE-- -
             // 1. Resize olayını kodla bağla
             this.Resize += new EventHandler(Form1_Resize);
 
@@ -169,20 +168,13 @@ namespace Makale_Graf_Analizi
 
                 // ÖNCE ÇİZ, SONRA İSTATİSTİK YAZ
                 CizimYap();
-                UpdateStats(); // <-- Burası artık dolu visibleIds ile çalışacak
+                UpdateStats(); 
 
                 pbGraf.Focus();
             }
         }
 
-        /*private void KonumlariAta()
-        {
-            if (pbGraf.Width == 0 || pbGraf.Height == 0) return;
-            foreach (var m in manager.Makaleler.Values)
-            {
-                m.Location = new PointF(rnd.Next(50, pbGraf.Width - 50), rnd.Next(50, pbGraf.Height - 50));
-            }
-        }*/
+        
 
         private void CizimYap()
         {
@@ -208,7 +200,7 @@ namespace Makale_Graf_Analizi
                 sf.Alignment = StringAlignment.Center;
                 sf.LineAlignment = StringAlignment.Center;
 
-                // --- RENKLER (Pastel Tonlar - Fotodaki Gibi) ---
+            
                 Brush fircaSecili = new SolidBrush(Color.FromArgb(255, 165, 0)); // Turuncu (Seçili)
                 Brush fircaCore = new SolidBrush(Color.FromArgb(255, 200, 200));   // Açık Kırmızı/Pembe (H-Core)
                 Brush fircaNormal = new SolidBrush(Color.FromArgb(220, 220, 220)); // Gri (Diğerleri)
@@ -218,7 +210,7 @@ namespace Makale_Graf_Analizi
                 // Yarıçapı sabitle (Yazı sığsın diye)
                 int r = Math.Max(nodeRadius, 20);
 
-                // --- YEŞİL YÖNLÜ BAĞLANTILAR (OKLAR DÜZELTİLDİ) ---
+                // --- YEŞİL YÖNLÜ BAĞLANTILAR  ---
                 using (var yesil = new Pen(Color.FromArgb(140, 0, 160, 0), 2))
                 {
                     var sirali = manager.Makaleler.Values
@@ -231,8 +223,6 @@ namespace Makale_Graf_Analizi
                         var p1 = ToScreen(sirali[i].Location);
                         var p2 = ToScreen(sirali[i + 1].Location);
 
-                        // DÜZELTME: Oku merkeze (p2) değil, dairenin kenarına çizdiriyoruz.
-                        // Böylece ok ucu dairenin altında kalmıyor.
                         PointF p2Kenar = GetCircleEdge(p1, p2, r);
 
                         DrawDirectedEdge(g, yesil, p1, p2Kenar);
@@ -253,7 +243,7 @@ namespace Makale_Graf_Analizi
                         var p1 = ToScreen(makale.Location);
                         var p2 = ToScreen(hedef.Location);
 
-                        // DÜZELTME: Siyah oklar da dairenin kenarında bitsin
+                    
                         PointF p2Kenar = GetCircleEdge(p1, p2, r);
 
                         DrawDirectedEdge(g, isCoreEdge ? kirmiziKalem : kalem, p1, p2Kenar);
@@ -433,7 +423,7 @@ namespace Makale_Graf_Analizi
 
 
 
-        // Form1.cs içinde bu metodu bul ve güncelle:
+       
         private Makale TiklananBul(Point screenP)
         {
             // Tıklama hassasiyetini çizilen dairenin boyutuna göre ayarla
@@ -459,11 +449,11 @@ namespace Makale_Graf_Analizi
 
 
 
-        // --- Form1.cs İçine ---
+     
 
         private void btnAnaliz_Click(object sender, EventArgs e)
         {
-            // --- MEVCUT K-CORE KODLARI (Buraları elleme) ---
+            
             // 1. Kutudaki sayıyı al
             if (!int.TryParse(txtK.Text, out int k))
             {
@@ -503,7 +493,7 @@ namespace Makale_Graf_Analizi
 
 
             // --- YENİ EKLEYECEĞİN BETWEENNESS CENTRALITY KISMI ---
-            // Buraya yapıştır:
+            
 
             var bcSonuclar = manager.CalculateBetweennessCentrality();
 
@@ -513,15 +503,15 @@ namespace Makale_Graf_Analizi
             string bcMesaj = "--- En Yüksek Betweenness Centrality ---\n";
             foreach (var item in enYuksekBes)
             {
-                // ID'nin sadece son kısmını göstermek daha okunaklı olabilir
+                
                 string kisaId = item.Key.Replace("https://openalex.org/", "");
                 bcMesaj += $"ID: {kisaId} - Skor: {item.Value:F2}\n";
             }
 
-            // İstersen MessageBox ile göster:
+            
             MessageBox.Show(bcMesaj, "Betweenness Centrality Sonuçları");
 
-            // VEYA (Daha şık) lblBilgi'ye ekle:
+            
             if (Controls.ContainsKey("lblBilgi"))
             {
                 Controls["lblBilgi"].Text += "\n" + bcMesaj;
@@ -534,10 +524,10 @@ namespace Makale_Graf_Analizi
             var nodes = manager.Makaleler.Values.OrderBy(m => m.Id, StringComparer.Ordinal).ToList();
             int N = nodes.Count;
 
-            // Ekranın boyuna göre hedef çember büyüklüğü (ekranda rahat görünsün)
+            // Ekranın boyuna göre hedef çember büyüklüğü
             float targetScreenR = 0.45f * Math.Min(pbGraf.Width, pbGraf.Height);
 
-            // Komşular birbirine değsin istiyorsak:
+            
             // chord length c = 2 * R * sin(pi/N) ≈ 2*nodeRadius  => nodeRadius ≈ R * sin(pi/N)
             // Buradan nodeRadius'i hedef ekran yarıçapına göre çıkarıp sınırlarız
             int computedRadius = (int)(targetScreenR * Math.Sin(Math.PI / N));
