@@ -13,3 +13,10 @@ Bu proje, akademik makaleler arasındaki atıf ve referans ilişkilerini analiz 
 
 - .NET Framework (veya .NET Core / 5+ projenin türüne göre)
 - Visual Studio
+
+## 👥 Contributors
+
+This project was developed by:
+
+* **Meryem Azra Gostak** - [GitHub](https://github.com/azragostak)
+* **Rana Hüseynova** 
