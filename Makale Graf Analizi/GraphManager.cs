@@ -23,12 +23,12 @@ namespace Makale_Graf_Analizi
             if (jsonContent.StartsWith("[")) jsonContent = jsonContent.Substring(1);
             if (jsonContent.EndsWith("]")) jsonContent = jsonContent.Substring(0, jsonContent.Length - 1);
 
-            // Objeleri ayırırken daha dikkatli olmalıyız
+            
             string[] objects = jsonContent.Split(new string[] { "}," }, StringSplitOptions.RemoveEmptyEntries);
 
             foreach (string objRaw in objects)
             {
-                // Parantez eksiklerini tamamlayarak gönderiyoruz ki parser hata yapmasın
+                
                 string cleanedObj = objRaw.Trim();
                 if (!cleanedObj.EndsWith("}")) cleanedObj += "}";
                 if (!cleanedObj.StartsWith("{")) cleanedObj = "{" + cleanedObj;
@@ -42,7 +42,7 @@ namespace Makale_Graf_Analizi
 
                 List<string> refs = ExtractListValue(cleanedObj, "\"referenced_works\":");
 
-                // --- KRİTİK: Yazarları buradan çekiyoruz ---
+             
                 List<string> authors = ExtractAuthors(cleanedObj);
 
                 Makale yeniMakale = new Makale
@@ -199,9 +199,9 @@ namespace Makale_Graf_Analizi
             return aktifNodes;
         }
 
-        // ... (KCoreHesapla metodunun bittiği yer)
+        
 
-        // BURAYA EKLE: Betweenness Centrality Hesaplama Metodu
+        
         public Dictionary<string, double> CalculateBetweennessCentrality()
         {
             // 1. Kenarları Yönsüz Kabul Et (Undirected Conversion) 
@@ -282,7 +282,7 @@ namespace Makale_Graf_Analizi
             return betweenness.ToDictionary(k => k.Key, v => v.Value / 2.0);
         }
 
-        // ... (Buradan sonra HesaplaHMetrikleri metodu devam edebilir)
+        
         public (int hIndex, double hMedian, List<Makale> hCore) HesaplaHMetrikleri(string makaleId)
         {
             foreach (var m in Makaleler.Values) m.IsHCore = false;
